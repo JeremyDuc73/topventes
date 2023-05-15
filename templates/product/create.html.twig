@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5">Voici tous les produits</h1>
+    {{ form_start(productForm) }}
+    {{ form_row(productForm.name) }}
+    {{ form_row(productForm.description) }}
+    <button type="button" class="btn btn-secondary add_item_link" data-collection-holder-class="images">AJOUTER UNE IMAGE</button>
+    <ul class="images"
+        data-index="{{ productForm.images|length > 0 ? productForm.images|last.vars.name + 1 : 0 }}"
+        data-prototype="{{ form_widget(productForm.images.vars.prototype)|e('html_attr') }}"
+    ></ul>
+
+    <button type="submit" class="btn btn-success">VALIDER</button>
+    {{ form_end(productForm) }}
+    <script>
+        const addFormToCollection = (e) => {
+            const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+            const item = document.createElement('li');
+
+            item.innerHTML = collectionHolder
+                .dataset
+                .prototype
+                .replace(
+                    /__name__/g,
+                    collectionHolder.dataset.index
+                );
+
+            collectionHolder.appendChild(item);
+
+            collectionHolder.dataset.index++;
+        };
+        document
+            .querySelectorAll('.add_item_link')
+            .forEach(btn => {
+                btn.addEventListener("click", addFormToCollection)
+            });
+    </script>
+{% endblock %}
