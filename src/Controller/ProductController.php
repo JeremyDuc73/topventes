@@ -47,7 +47,7 @@ class ProductController extends AbstractController
             if (!$edit){
                 $images = $productForm->getData()->getImages();
                 foreach($images as $image){
-                    $image->setGateau($product);
+                    $image->setProduct($product);
                 }
             }
             $manager->persist($product);
