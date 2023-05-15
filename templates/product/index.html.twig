@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5">Voici tous les produits</h1>
+    {% for product in products %}
+        <div class="border border-dark m-4 p-3">
+            <h3>{{ product.name }}</h3>
+            <p><strong>{{ product.price }} €</strong></p>
+            <p>{{ product.description }}</p>
+            <a href="{{ path('app_product_show', {id:product.id}) }}" class="btn btn-primary">VOIR PLUS</a>
+        </div>
+    {% endfor %}
+{% endblock %}
