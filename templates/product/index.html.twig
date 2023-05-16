@@ -4,10 +4,34 @@
 
 {% block body %}
     <h1 class="mt-5">Voici tous les produits</h1>
-    {% for product in products %}
+    <div class="d-flex">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <button type="button" class="btn btn-primary">FILTRE</button>
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 38px);" data-popper-placement="bottom-start">
+                    {% for category in categories %}
+                        <a class="dropdown-item" href="{{ path('app_product_filtered', {id:category.id})  }}">{{ category.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <a href="{{ path('app_product') }}" class="btn btn-primary ms-4">REINITIALISER LES FILTRES</a>
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="d-flex mt-3">
+        <a href="{{ path('app_product_create') }}" class="btn btn-success">AJOUTER UN PRODUIT</a>
+        <a href="{{ path('app_category') }}" class="btn btn-success ms-3">VOIR LES CATEGORIES</a>
+    </div>
+    {% endif %}
+    {% for product in products|sort((a, b)=>a.name <=> b.name) %}
         <div class="border border-dark m-4 p-3">
             <h3>{{ product.name }}</h3>
-            <p><strong>{{ product.price }} €</strong></p>
+            <div class="d-flex">
+                <p><strong>{{ product.price }} €</strong></p>
+                <p class="text-muted ms-2">- {{ product.category.name }}</p>
+            </div>
+
             <p>{{ product.description }}</p>
             <a href="{{ path('app_product_show', {id:product.id}) }}" class="btn btn-primary">VOIR PLUS</a>
         </div>

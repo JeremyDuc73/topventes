@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoryController!{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_category_create') }}" class="btn btn-success mt-5 mb-4">CREER UNE NOUVELLE CATEGORIE</a>
+    {% for category in categories %}
+        <div class="border border-dark m-4 p-3 d-flex justify-content-between">
+            <h3>{{ category.name }}</h3>
+            <div>
+                <a href="{{ path('app_category_edit', {id:category.id}) }}" class="btn btn-warning">MODIFIER</a>
+                <a href="{{ path('app_category_delete', {id:category.id}) }}" class="btn btn-danger">SUPPRIMER</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfileController!{% endblock %}
+
+{% block body %}
+    <h1 class="mt-4 mb-4 text-center">Bienvenue sur votre profil {{ app.user.username }}</h1>
+
+    <div class="d-flex flex-column align-items-center">
+        <div style="
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-image: url('{% if user.profile.image is not null %}/images/{{ user.profile.image.imageName }}{% else %}/images/profilepicturebase.png{% endif %}');
+        background-size: cover;
+        background-position: center;"></div>
+        <div class="border border-dark mt-5">
+            <p class="text-center p-4 mb-0"><strong>
+                    {% if user.profile.description is not null %}
+                        {{ user.profile.description }}
+                    {% else %}
+                        Ici votre description
+                    {% endif %}
+                </strong></p>
+        </div>
+        <div>
+            <a href="{{ path('app_profile_edit', {id:user.profile.id}) }}" class="btn btn-primary mt-5">MODIFIER VOTRE PROFIL</a>
+        </div>
+    </div>
+
+{% endblock %}

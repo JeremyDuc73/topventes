@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,10 +16,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     #[Route('/product', name: 'app_product')]
-    public function index(ProductRepository $productRepository): Response
+    #[Route('/product/filter/{id}', name: 'app_product_filtered')]
+    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Category $category=null): Response
     {
+        if ($category){
+            return $this->render('product/index.html.twig',[
+                'categories'=>$categoryRepository->findAll(),
+                'products'=>$productRepository->findBy([
+                    'category'=>$category
+                ])
+            ]);
+        }
         return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+            'categories'=> $categoryRepository->findAll(),
+            'products' => $productRepository->findAll()
         ]);
     }
 
@@ -44,20 +56,31 @@ class ProductController extends AbstractController
         $productForm->handleRequest($request);
         if ($productForm->isSubmitted() && $productForm->isValid())
         {
-            if (!$edit){
-                $images = $productForm->getData()->getImages();
-                foreach($images as $image){
-                    $image->setProduct($product);
-                }
-            }
-            $manager->persist($product);
-            $manager->flush();
-            return $this->redirectToRoute('app_product_show', ['id'=>$product->getId()]);
+           if($edit){
+               foreach ($product->getImages() as $img){
+                   $manager->remove($img); $manager->flush();
+               }
+           }
+           $images = $productForm->getData()->getImages();
+           foreach($images as $image){
+               $image->setProduct($product);
+           }
+           $manager->persist($product);
+           $manager->flush();
+           return $this->redirectToRoute('app_product_show', ['id'=>$product->getId()]);
         }
 
         return $this->renderForm('product/create.html.twig', [
             'productForm'=>$productForm,
             'edit'=>$edit
         ]);
+    }
+
+    #[Route('/admin/product/delete/{id}', name: 'app_product_delete', priority: 2)]
+    public function delete(Product $product, EntityManagerInterface $manager): Response
+    {
+        $manager->remove($product);
+        $manager->flush();
+        return $this->redirectToRoute('app_product');
     }
 }
