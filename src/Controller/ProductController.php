@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class ProductController extends AbstractController
 {
     #[Route('/product', name: 'app_product')]
@@ -56,15 +57,6 @@ class ProductController extends AbstractController
         $productForm->handleRequest($request);
         if ($productForm->isSubmitted() && $productForm->isValid())
         {
-           if($edit){
-               foreach ($product->getImages() as $img){
-                   $manager->remove($img); $manager->flush();
-               }
-           }
-           $images = $productForm->getData()->getImages();
-           foreach($images as $image){
-               $image->setProduct($product);
-           }
            $manager->persist($product);
            $manager->flush();
            return $this->redirectToRoute('app_product_show', ['id'=>$product->getId()]);

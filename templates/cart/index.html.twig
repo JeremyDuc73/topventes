@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CartController!{% endblock %}
+
+{% block body %}
+    <h1 class="mt-5">Votre panier</h1>
+    {% if globalcart.count() == 0 %}
+    <h2 class="mt-5 mb-5">VOTRE PANIER EST VIDE</h2>
+    {% else %}
+        <table class="table table-hover mt-5">
+            <thead>
+            <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col">Buttons</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for item in cart %}
+
+                <tr class="table-active">
+
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.price}} €</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.price * item.quantity}} €</td>
+                    <td>
+                        <a href="{{ path('app_cart_remove_one', {id:item.product.id}) }}" class="btn btn-secondary"><strong>-</strong></a>
+                        <a href="{{ path('app_cart_add_from_cart', {id:item.product.id, quantity:1}) }}" class="btn btn-success"><strong>+</strong></a>
+                        <a href="{{ path('app_cart_remove_whole', {id:item.product.id}) }}" class="btn btn-danger"><strong>X</strong></a>
+
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr class="table-warning">
+
+                <td><a href="{{ path('app_cart_empty') }}" class="btn btn-primary">Empty cart</a></td>
+                <td></td>
+                <td> Grand Total :</td>
+                <td><strong> {{ total}} €</strong></td>
+                <td><a href="" class="btn btn-success">Make Order</a></td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    <a href="{{ path('app_product') }}" class="btn btn-primary">Retour aux produits</a>
+{% endblock %}

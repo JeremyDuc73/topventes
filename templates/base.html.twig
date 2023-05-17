@@ -6,7 +6,7 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
-            <link rel="stylesheet" href="https://bootswatch.com/5/sandstone/bootstrap.min.css">
+            <link rel="stylesheet" href="https://bootswatch.com/5/flatly/bootstrap.min.css">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -17,34 +17,44 @@
         {% endblock %}
     </head>
     <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary p-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ path('app_home') }}">TopVentes</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ path('app_product') }}">Produits
-                            <span class="visually-hidden">(current)</span>
-                        </a>
+                        <a style="font-size: larger" class="nav-link active border border-light me-4" href="{{ path('app_home') }}">TOPVENTES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="font-size: larger" class="nav-link" href="{{ path('app_product') }}">PRODUITS</a>
                     </li>
                     {% if not app.user%}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_register') }}">S'INSCRIRE</a>
+                        <a style="font-size: larger" class="nav-link" href="{{ path('app_register') }}">S'INSCRIRE<i class="bi bi-box-arrow-up-right ms-2"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_login') }}">SE CONNECTER</a>
+                        <a style="font-size: larger" class="nav-link" href="{{ path('app_login') }}">SE CONNECTER <i class="bi bi-box-arrow-in-right"></i></a>
                     </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link active" href="{{ path('app_profile', {id:app.user.id}) }}">PROFIL DE {{ app.user.username }}</a>
+                                <div class="d-flex">
+                                    <a style="font-size: larger; text-transform: uppercase" class="nav-link" href="{{ path('app_profile', {id:app.user.id}) }}">profil de {{ app.user.username }}</a>
+                                    {% if app.user.profile.image is not null %}
+
+                                        <a href="{{ path('app_profile', {id:app.user.id}) }}" ><img style="border-radius: 50%" src="{{ vich_uploader_asset(app.user.profile.image, 'imageFile')|imagine_filter('mini_vignette') }}" alt=""></a>
+
+                                    {% else %}
+                                        <a href="{{ path('app_profile', {id:app.user.id}) }}"><img style="border-radius: 50%;" src="{{ asset('images/profilepicturebase.png')|imagine_filter('mini_vignette') }}"></a>
+                                    {% endif %}
+                                </div>
                             </li>
                     {% endif %}
                 </ul>
                 {% if app.user %}
-                    <a href="{{ path('app_logout') }}" class="btn btn-danger">SE DECONNECTER</a>
+                    <a style="font-size: larger" href="{{ path('app_cart') }}" class="btn btn-success me-4"><i class="bi bi-cart"></i> ({{ globalcart.count() }})</a>
+                    <a style="font-size: larger" href="{{ path('app_logout') }}" class="btn btn-danger ">SE DECONNECTER <i class="bi bi-box-arrow-right ms-2"></i></a>
                 {% endif %}
             </div>
         </div>

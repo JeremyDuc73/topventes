@@ -6,24 +6,32 @@
     <h1 class="mt-4 mb-4 text-center">Bienvenue sur votre profil {{ app.user.username }}</h1>
 
     <div class="d-flex flex-column align-items-center">
-        <div style="
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        background-image: url('{% if user.profile.image is not null %}/images/{{ user.profile.image.imageName }}{% else %}/images/profilepicturebase.png{% endif %}');
-        background-size: cover;
-        background-position: center;"></div>
+        <div>
+            {% if app.user.profile.image is not null %}
+
+                <img style="border-radius: 50%" src="{{ vich_uploader_asset(app.user.profile.image, 'imageFile')|imagine_filter('petite_vignette') }}" alt="">
+
+            {% else %}
+                <img style="border-radius: 50%" src="{{ asset('images/profilepicturebase.png')|imagine_filter('petite_vignette') }}">
+            {% endif %}
+        </div>
         <div class="border border-dark mt-5">
             <p class="text-center p-4 mb-0"><strong>
-                    {% if user.profile.description is not null %}
-                        {{ user.profile.description }}
+                    {% if app.user.profile.description is not null %}
+                        {{ app.user.profile.description }}
                     {% else %}
                         Ici votre description
                     {% endif %}
                 </strong></p>
         </div>
         <div>
-            <a href="{{ path('app_profile_edit', {id:user.profile.id}) }}" class="btn btn-primary mt-5">MODIFIER VOTRE PROFIL</a>
+            <a href="{{ path('app_profile_edit') }}" class="btn btn-primary mt-5">MODIFIER VOTRE PROFIL</a>
+        </div>
+        <div class="mt-4">
+            {{ form_start(formImage, {'action': path('app_image_profile_add'), 'method': 'POST'}) }}
+            {{ form_widget(formImage.imageFile)}}
+            <button type="submit" class="btn btn-success mt-4">CHANGER L'IMAGE</button>
+            {{ form_end(formImage) }}
         </div>
     </div>
 

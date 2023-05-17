@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Profile;
 use App\Entity\User;
+use App\Form\ImageType;
 use App\Form\ProfileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,25 +15,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
-    #[Route('/profile/{id}', name: 'app_profile')]
-    public function index(User $user): Response
+    #[Route('/profile', name: 'app_profile')]
+    public function index(): Response
     {
-        return $this->render('profile/index.html.twig', [
-            'user' => $user,
+        $image = new Image();
+        $formImage = $this->createForm(ImageType::class, $image);
+
+        return $this->renderForm('profile/index.html.twig', [
+            'formImage'=>$formImage
         ]);
     }
 
-    #[Route('/profile/edit/{id}', name: 'app_profile_edit')]
-    public function edit(Request $request, EntityManagerInterface $manager, Profile $profile): Response
+    #[Route('/profile/edit', name: 'app_profile_edit')]
+    public function edit(Request $request, EntityManagerInterface $manager): Response
     {
+        $profile = $this->getUser()->getProfile();
         $profileForm = $this->createForm(ProfileType::class, $profile);
         $profileForm->handleRequest($request);
         if ($profileForm->isSubmitted() && $profileForm->isValid()) {
-            $manager->remove($profile->getImage());
-            $manager->flush();
             $manager->persist($profile);
             $manager->flush();
-            return $this->redirectToRoute('app_profile', ['id'=>$profile->getProfileUser()->getId()]);
+            return $this->redirectToRoute('app_profile');
         }
         return $this->renderForm('profile/edit.html.twig', [
             'profileForm'=>$profileForm

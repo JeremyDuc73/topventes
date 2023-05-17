@@ -21,16 +21,6 @@ class ProductType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('price')
-            ->add('images',CollectionType::class, [
-                'entry_type'=>ImageType::class,
-                'allow_add'=>true,
-                'allow_delete'=>true,
-                'required'=>false,
-                'label'=>false,
-                'by_reference'=>false,
-                'disabled'=>false,
-                'prototype'=>true
-            ])
             ->add('category', EntityType::class,[
                 'class'=>Category::class,
                 'query_builder' => function (CategoryRepository $categoryRepository) {
