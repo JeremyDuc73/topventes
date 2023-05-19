@@ -1,11 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoryController!{% endblock %}
+{% block title %}
+    {% if edit %}
+        Modifier la catégorie
+    {% else %}
+        Ajouter une catégorie
+    {% endif %}
+{% endblock %}
 
 {% block body %}
-    <h1 class="mt-5">Ajouter une nouvelle catégorie</h1>
+    {% if edit %}
+        <h1 class="mt-5">Modifier la catégorie</h1>
+    {% else %}
+        <h1 class="mt-5">Ajouter une nouvelle catégorie</h1>
+    {% endif %}
+
     {{ form_start(categoryForm) }}
     {{ form_row(categoryForm.name) }}
     <button class="btn btn-success" type="submit">AJOUTER</button>
     {{ form_end(categoryForm) }}
+    <a href="{{ path('app_category') }}" class="mt-3 btn btn-primary">ANNULER</a>
 {% endblock %}

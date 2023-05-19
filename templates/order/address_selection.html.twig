@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choisir une adresse{% endblock %}
+
+{% block body %}
+    <h1 class="mt-4 mb-4">Veuillez sélectionner une adresse</h1>
+    {% if app.user.profile.firstName is not null and app.user.profile.lastName is not null %}
+        {% if app.user.profile.addresses is empty %}
+            <h4 class="mt-4 mb-3">Vous n'avez pas d'adresses enregistrées</h4>
+        {% else %}
+            {% for address in app.user.profile.addresses %}
+                <div class="border boder-dark text-center p-3 mt-4 mb-3">
+                    <div>
+                        <p>{{ app.user.profile.firstName }} {{ app.user.profile.lastName }}</p>
+                        <p>{{ address.streetNumber }} {{ address.street }}, {{ address.zipcode }} {{ address.city }}, {{ address.country }}</p>
+                        <p>numéro de téléphone (+33){{ address.phoneNumber }}</p>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <a href="{{ path('app_payment', {id:address.id}) }}" class="btn btn-success me-4">UTILISER CETTE ADRESSE</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <a href="{{ path('app_address') }}" class="btn btn-primary">GERER VOS ADRESSES</a>
+    {% else %}
+        <p>Vous devez définir un prénom et un nom d'abord</p>
+        <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">MODIFIER LE PROFIL</a>
+    {% endif %}
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfileController!{% endblock %}
+{% block title %}Profil de {{ app.user.username }}{% endblock %}
 
 {% block body %}
     <h1 class="mt-4 mb-4 text-center">Bienvenue sur votre profil {{ app.user.username }}</h1>
@@ -15,7 +15,14 @@
                 <img style="border-radius: 50%" src="{{ asset('images/profilepicturebase.png')|imagine_filter('petite_vignette') }}">
             {% endif %}
         </div>
-        <div class="border border-dark mt-5">
+        <div class="d-flex mt-3 justify-content-center">
+            {% if app.user.profile.firstName is not null and app.user.profile.lastName is not null %}
+                <p class="mb-0"><strong>{{ app.user.profile.firstName }} {{ app.user.profile.lastName }}</strong></p>
+            {% else %}
+                <p class="mb-0"><strong>Ici votre prénom et votre nom</strong></p>
+            {% endif %}
+        </div>
+        <div class="border border-dark mt-4">
             <p class="text-center p-4 mb-0"><strong>
                     {% if app.user.profile.description is not null %}
                         {{ app.user.profile.description }}
@@ -27,12 +34,9 @@
         <div>
             <a href="{{ path('app_profile_edit') }}" class="btn btn-primary mt-5">MODIFIER VOTRE PROFIL</a>
         </div>
-        <div class="mt-4">
-            {{ form_start(formImage, {'action': path('app_image_profile_add'), 'method': 'POST'}) }}
-            {{ form_widget(formImage.imageFile)}}
-            <button type="submit" class="btn btn-success mt-4">CHANGER L'IMAGE</button>
-            {{ form_end(formImage) }}
-        </div>
+
+        <a href="{{ path('app_address') }}" class="btn btn-secondary mt-4">VOIR MES ADRESSES ENREGISTREES</a>
+        <a href="{{ path('app_my_orders') }}" class="btn btn-secondary mt-4">VOIR MES COMMANDES</a>
     </div>
 
 {% endblock %}

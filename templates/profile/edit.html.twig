@@ -1,11 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProductController!{% endblock %}
+{% block title %}Modifier votre profil{% endblock %}
 
 {% block body %}
     <h1 class="mt-5">Modifier votre profil</h1>
     {{ form_start(profileForm) }}
     {{ form_row(profileForm.description) }}
+    {{ form_row(profileForm.firstName) }}
+    {{ form_row(profileForm.lastName) }}
     <button type="submit" class="btn btn-success">VALIDER</button>
     {{ form_end(profileForm) }}
+
+    <div class="mt-4">
+        {{ form_start(formImage, {'action': path('app_image_profile_add'), 'method': 'POST'}) }}
+        {{ form_widget(formImage.imageFile)}}
+        <button style="margin-left: auto;margin-right: auto; display: block" type="submit" class="btn btn-success mt-4">CHANGER L'IMAGE</button>
+        {{ form_end(formImage) }}
+    </div>
 {% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MyOrdersController!{% endblock %}
+
+{% block body %}
+    <h1 class="mt-4 mb-4">Vos commandes :</h1>
+    {% for order in app.user.profile.orders %}
+        <div class="border border-dark d-flex p-3 mt-3 mb-3 align-items-center justify-content-center">
+            <p class="mb-0 ms-3 me-3"><strong>Commande du : {{ order.createdAt ? order.createdAt|date('d-m-Y à H:i')}}</strong></p>
+            <p class="mb-0 ms-3 me-3"><strong>Status de la commande : {{ order.status }}</strong></p>
+            <p class="mb-0 ms-3 me-3"><strong>Total de la commande : {{ order.total }} €</strong></p>
+            <a href="{{ path('app_my_orders_show', {id:order.id}) }}" class="btn btn-primary ms-3 me-3">VOIR LE DETAIL</a>
+        </div>
+    {% endfor %}
+    <a style="margin-left: auto;margin-right: auto; display: block" href="{{ path('app_profile') }}" class="btn btn-primary">RETOUR AU PROFIL</a>
+{% endblock %}

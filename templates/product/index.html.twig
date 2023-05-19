@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProductController!{% endblock %}
+{% block title %}Les produits{% endblock %}
 
 {% block body %}
     <h1 class="mt-5">Voici tous les produits</h1>
@@ -31,12 +31,22 @@
                 <p><strong>{{ product.price }} €</strong></p>
                 <p class="text-muted ms-2">- {{ product.category.name }}</p>
             </div>
-
+            <img src="{{ vich_uploader_asset(product.images.0,'imageFile')|imagine_filter('vignette') }}">
             <p>{{ product.description }}</p>
             <div class="d-flex">
                 <a href="{{ path('app_product_show', {id:product.id}) }}" class="btn btn-primary">VOIR PLUS</a>
                 <a href="{{ path('app_cart_add',{id:product.id, quantity:1}) }}" class="btn btn-success ms-3 me-3">AJOUTER UN AU PANIER</a>
-                <a href="{{ path('app_cart_add',{id:product.id, quantity:2}) }}" class="btn btn-success">AJOUTER DEUX AU PANIER</a>
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" class="btn btn-success">CHOISIR LA QUANTITE</button>
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 38px);" data-popper-placement="bottom-start">
+                            {% for i in 1..10%}
+                                <a class="dropdown-item" href="{{ path('app_cart_add',{id:product.id, quantity:i})  }}">{{ i }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     {% endfor %}

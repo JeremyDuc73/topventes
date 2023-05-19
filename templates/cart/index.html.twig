@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CartController!{% endblock %}
+{% block title %}Panier ({{ globalcart.count() }}){% endblock %}
 
 {% block body %}
     <h1 class="mt-5">Votre panier</h1>
@@ -37,11 +37,11 @@
             {% endfor %}
             <tr class="table-warning">
 
-                <td><a href="{{ path('app_cart_empty') }}" class="btn btn-primary">Empty cart</a></td>
+                <td><a href="{{ path('app_cart_empty') }}" class="btn btn-primary">VIDER LE PANIER</a></td>
                 <td></td>
                 <td> Grand Total :</td>
                 <td><strong> {{ total}} €</strong></td>
-                <td><a href="" class="btn btn-success">Make Order</a></td>
+                <td><a href="{{ path('app_select_address') }}" class="btn btn-success">PAYER</a></td>
             </tr>
             </tbody>
         </table>

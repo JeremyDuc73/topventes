@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement{% endblock %}
+
+{% block body %}
+    <h1 class="mt-4 mb-4">Votre commande :</h1>
+    {% for item in globalcart.getCart() %}
+        <div class="border border-dark mt-4 mb-4 p-3 d-flex justify-content-center align-items-center">
+            <div>
+                <img src="{{ vich_uploader_asset(item.product.images.0,'imageFile')|imagine_filter('petite_vignette') }}">
+            </div>
+            <div class="ms-3">
+                <h4>{{ item.product.name }}</h4>
+                <h4><strong>{{ item.product.price }} € X {{ item.quantity }}</strong></h4>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="d-flex align-items-center flex-column">
+        <h4><strong>Total : {{ globalcart.getTotal() }} €</strong></h4>
+        <p>Choisir une méthode de paiement</p>
+        <a href="{{ path('app_make_order',{id:address.id}) }}" class="btn btn-success">PASSER LA COMMANDE</a>
+    </div>
+{% endblock %}

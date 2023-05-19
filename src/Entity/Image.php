@@ -32,7 +32,7 @@ class Image implements Serializable
     #[ORM\ManyToOne(inversedBy: 'images')]
     private ?Product $product = null;
 
-    #[ORM\OneToOne(mappedBy: 'image', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'image', cascade: ['persist'])]
     private ?Profile $profile = null;
 
 

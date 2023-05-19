@@ -18,17 +18,15 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function index(): Response
     {
-        $image = new Image();
-        $formImage = $this->createForm(ImageType::class, $image);
-
-        return $this->renderForm('profile/index.html.twig', [
-            'formImage'=>$formImage
-        ]);
+        return $this->renderForm('profile/index.html.twig');
     }
 
     #[Route('/profile/edit', name: 'app_profile_edit')]
     public function edit(Request $request, EntityManagerInterface $manager): Response
     {
+        $image = new Image();
+        $formImage = $this->createForm(ImageType::class, $image);
+
         $profile = $this->getUser()->getProfile();
         $profileForm = $this->createForm(ProfileType::class, $profile);
         $profileForm->handleRequest($request);
@@ -38,7 +36,8 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('app_profile');
         }
         return $this->renderForm('profile/edit.html.twig', [
-            'profileForm'=>$profileForm
+            'profileForm'=>$profileForm,
+            'formImage'=>$formImage
         ]);
     }
 }

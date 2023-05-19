@@ -12,10 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/image')]
 class ImageController extends AbstractController
 {
-    #[Route('/product/{id}', name: 'app_image')]
+    #[Route('/admin/image/product/{id}', name: 'app_image')]
     public function index(Product $product): Response
     {
         $image = new Image();
@@ -26,8 +25,8 @@ class ImageController extends AbstractController
             ]);
     }
 
-    #[Route('/addtoprofile', name: 'app_image_profile_add')]
-    #[Route('/addtoproduct/{id}', name: 'app_image_product_add')]
+    #[Route('/image/addtoprofile', name: 'app_image_profile_add')]
+    #[Route('/admin/image/addtoproduct/{id}', name: 'app_image_product_add')]
     public function addImage(Product $product=null, Request $request, EntityManagerInterface $manager): Response
     {
         $routeName = $request->attributes->get("_route");
@@ -54,7 +53,7 @@ class ImageController extends AbstractController
         return $this->redirectToRoute('app_image', ['id' => $product->getId()]);
     }
 
-    #[Route('/removefromproduct/{id}', name: 'app_image_delete')]
+    #[Route('/admin/image/removefromproduct/{id}', name: 'app_image_delete')]
     public function removeFromProduct(Image $image, EntityManagerInterface $manager): Response
     {
         if ($image) {

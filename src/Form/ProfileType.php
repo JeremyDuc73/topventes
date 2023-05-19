@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Profile;
+use Doctrine\DBAL\Types\StringType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,6 +15,12 @@ class ProfileType extends AbstractType
     {
         $builder
             ->add('description', TextType::class, [
+                'required'=>true
+            ])
+            ->add('firstName', TextType::class, [
+                'required'=>true
+            ])
+            ->add('lastName', TextType::class, [
                 'required'=>true
             ])
         ;

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MyOrdersController!{% endblock %}
+
+{% block body %}
+    <h1 class="mt-4 mb-4">Commande du {{ order.createdAt ? order.createdAt|date('d-m-Y à H:i') }}</h1>
+    <p><strong>Livraison au : {{ order.address.streetNumber }} {{ order.address.street }},  {{ order.address.zipcode }}  {{ order.address.city }},  {{ order.address.country }}</strong></p>
+    {% for item in order.orderItems %}
+        <div class="border border-dark mt-4 mb-4 p-3 d-flex justify-content-center align-items-center">
+            <div>
+                <img src="{{ vich_uploader_asset(item.product.images.0,'imageFile')|imagine_filter('petite_vignette') }}">
+            </div>
+            <div class="ms-3">
+                <h4>{{ item.product.name }}</h4>
+                <h4><strong>{{ item.product.price }} € X {{ item.quantity }}</strong></h4>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="border border-dark d-flex p-3 mt-3 mb-3 align-items-center justify-content-center">
+        <p class="mb-0 ms-3 me-3"><strong>Status de la commande : {{ order.status }}</strong></p>
+        <p class="mb-0 ms-3 me-3"><strong>Total de la commande : {{ order.total }} €</strong></p>
+    </div>
+    <a style="margin-left: auto;margin-right: auto; display: block" href="{{ path('app_my_orders') }}" class="btn btn-primary mb-4">RETOUR AUX COMMANDES</a>
+{% endblock %}
