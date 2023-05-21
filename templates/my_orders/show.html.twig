@@ -16,9 +16,13 @@
             </div>
         </div>
     {% endfor %}
-    <div class="border border-dark d-flex p-3 mt-3 mb-3 align-items-center justify-content-center">
-        <p class="mb-0 ms-3 me-3"><strong>Status de la commande : {{ order.status }}</strong></p>
-        <p class="mb-0 ms-3 me-3"><strong>Total de la commande : {{ order.total }} €</strong></p>
+    <div class="d-flex flex-column border border-dark mt-3 mb-3 p-3 align-items-center">
+        <div class="d-flex align-items-center justify-content-center">
+            <p class="mb-0 ms-3 me-3"><strong>Status de la commande : {{ order.status }}</strong></p>
+            <p class="mb-0 ms-3 me-3"><strong>Total de la commande : {{ order.total }} €</strong></p>
+        </div>
+        <a href="{{ path('app_mail_invoice', {id:order.id}) }}" class="btn btn-primary mt-3">RECEVOIR LA FACTURE PAR MAIL</a>
     </div>
+
     <a style="margin-left: auto;margin-right: auto; display: block" href="{{ path('app_my_orders') }}" class="btn btn-primary mb-4">RETOUR AUX COMMANDES</a>
 {% endblock %}
