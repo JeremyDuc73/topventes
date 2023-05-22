@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MyOrdersController!{% endblock %}
+{% block title %}Commande {{ order.createdAt ? order.createdAt|date('d-m-Y') }}{% endblock %}
 
 {% block body %}
     <h1 class="mt-4 mb-4">Commande du {{ order.createdAt ? order.createdAt|date('d-m-Y à H:i') }}</h1>
     <p><strong>Livraison au : {{ order.address.streetNumber }} {{ order.address.street }},  {{ order.address.zipcode }}  {{ order.address.city }},  {{ order.address.country }}</strong></p>
+    {% if order.orderItems|length > 0 %}
     {% for item in order.orderItems %}
         <div class="border border-dark mt-4 mb-4 p-3 d-flex justify-content-center align-items-center">
             <div>
@@ -16,6 +17,9 @@
             </div>
         </div>
     {% endfor %}
+    {% else %}
+    <p class="border border-dark p-2">Vos produits ne sont plus disponibles sur le site mais votre commande est bien prise compte</p>
+    {% endif %}
     <div class="d-flex flex-column border border-dark mt-3 mb-3 p-3 align-items-center">
         <div class="d-flex align-items-center justify-content-center">
             <p class="mb-0 ms-3 me-3"><strong>Status de la commande : {{ order.status }}</strong></p>

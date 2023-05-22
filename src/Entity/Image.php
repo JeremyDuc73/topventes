@@ -111,11 +111,18 @@ class Image implements Serializable
         return $this;
     }
 
+    public function __serialize():array
+    {
+        return ['id'=>$this->id];
+    }
     public function serialize()
     {
         return serialize(['id'=>$this->id]);
     }
-
+    public function __unserialize(array $data): void
+    {
+        // TODO: Implement __unserialize() method.
+    }
     public function unserialize(string $data): void
     {
         // TODO: Implement __unserialize() method.

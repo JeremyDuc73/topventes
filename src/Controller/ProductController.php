@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\Review;
 use App\Form\ProductType;
+use App\Form\ReviewType;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,8 +20,21 @@ class ProductController extends AbstractController
 {
     #[Route('/product', name: 'app_product')]
     #[Route('/product/filter/{id}', name: 'app_product_filtered')]
-    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Category $category=null): Response
+    #[Route('/search', name: 'app_product_search', methods: ['POST'])]
+    public function index(ProductRepository $productRepository, Request $request, CategoryRepository $categoryRepository, Category $category=null): Response
     {
+        if ($request->get("_route") === 'app_product_search'){
+            $searchValue = $request->get('value');
+            if ($searchValue == ''){
+                return $this->redirectToRoute('app_product');
+            }
+            $products = $productRepository->findByExampleField($searchValue);
+            return $this->render('product/index.html.twig', [
+                'categories'=> $categoryRepository->findAll(),
+                'products' => $products
+            ]);
+        }
+
         if ($category){
             return $this->render('product/index.html.twig',[
                 'categories'=>$categoryRepository->findAll(),
@@ -37,8 +52,12 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'app_product_show')]
     public function show(Product $product): Response
     {
-        return $this->render('product/show.html.twig', [
+        $review = new Review();
+        $reviewForm = $this->createForm(ReviewType::class, $review);
+
+        return $this->renderForm('product/show.html.twig', [
             'product' => $product,
+            'reviewForm'=>$reviewForm
         ]);
     }
 

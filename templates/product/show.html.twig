@@ -3,14 +3,48 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
-    <h1 class="mt-5">Voici votre produit</h1>
     <div class="border border-dark m-4 p-3">
         <h3>{{ product.name }}</h3>
-        <p><strong>{{ product.price }} €</strong></p>
-        {%for image in product.images %}
-            <img src="{{ vich_uploader_asset(image,'imageFile')|imagine_filter('vignette') }}">
-        {% endfor %}
+        <div class="d-flex">
+            <p class="me-3"><strong>{{ product.price }} €</strong></p>
+            <div>
+                {% for i in 1..5 %}
+
+                    {% if product.getAverageStars() < i %}
+                        <i class="bi bi-star"></i>
+                    {% else %}
+                        <i class="bi bi-star-fill"></i>
+                    {% endif %}
+
+                {% endfor %}
+            </div>
+        </div>
+        <div>
+            {%for image in product.images %}
+                <img src="{{ vich_uploader_asset(image,'imageFile')|imagine_filter('vignette') }}">
+            {% endfor %}
+        </div>
         <p>{{ product.description }}</p>
+        <div class="mt-4 d-flex align-items-center">
+            <div>
+                <p class=" mb-0 me-3"><strong>VOTRE NOTE :</strong></p>
+            </div>
+            <div>
+                {% if product.isRatedBy(app.user) %}
+                    {% for i in 1..5 %}
+                        {% if product.getRateByUser(app.user).stars < i %}
+                            <a href="{{ path('app_rate', {id:product.id, stars:i}) }}"><i class="bi bi-star"></i></a>
+                        {% else %}
+                            <a href="{{ path('app_rate', {id:product.id, stars:i}) }}"><i class="bi bi-star-fill"></i></a>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for i in 1..5 %}
+                        <a href="{{ path('app_rate', {id:product.id, stars:i}) }}"><i class="bi bi-star"></i></a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
         <div class="d-flex">
             <a href="{{ path('app_product') }}" class="btn btn-primary">RETOUR</a>
             {% if is_granted('ROLE_ADMIN') %}
@@ -19,6 +53,36 @@
             <a href="{{ path('app_product_delete', {id:product.id}) }}" class="btn btn-danger">SUPPRIMER</a>
             {% endif %}
         </div>
-
+    </div>
+    <div>
+        {% for review in product.reviews %}
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="">
+                    <p><strong>{{ review.content }}</strong></p>
+                    <div class="d-flex align-items-center">
+                        <p class="mb-0 me-2">Ecrit le : {{ review.createdAt|date("d/m/Y - H:i") }} par {{ review.author.username }}</p>
+                        {% if review.author.profile.image is not null %}
+                            <img style="border-radius: 50%" src="{{ vich_uploader_asset(review.author.profile.image, 'imageFile')|imagine_filter('mini_vignette') }}" alt="">
+                        {% else %}
+                            <img style="border-radius: 50%;" src="{{ asset('images/profilepicturebase.png')|imagine_filter('mini_vignette') }}">
+                        {% endif %}
+                    </div>
+                </div>
+                {% if app.user == review.author or is_granted('ROLE_ADMIN') %}
+                    <div>
+                        <a href="{{ path('app_review_edit', {id:review.id}) }}" class="btn btn-warning">MODIFIER</a>
+                        <a href="{{ path('app_review_delete', {id:review.id}) }}" class="btn btn-danger">SUPPRIMER</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <hr>
+        <hr>
+        <h2>Ecrire un commentaire</h2>
+        {{ form_start(reviewForm,{'action':path('app_review_create',{id:product.id})}) }}
+        {{ form_row(reviewForm.content) }}
+        <button type="submit" class="btn btn-success mb-4">POSTER</button>
+        {{ form_end(reviewForm) }}
     </div>
 {% endblock %}

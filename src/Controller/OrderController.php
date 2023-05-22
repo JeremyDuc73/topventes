@@ -50,6 +50,7 @@ class OrderController extends AbstractController
         $manager->flush();
         $cartService->emptyCart();
 
+
         return $this->redirectToRoute('app_my_orders_show', ['id'=>$order->getId()]);
     }
 }
